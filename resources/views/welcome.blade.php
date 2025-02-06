@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>Laravel - Crontab!</title>
         <h1>Jacob McGuire</h1>
         <p>{{ date('Y-m-d') }}</p>
         <p>Updated with Crontab!</p>
