@@ -7,6 +7,7 @@
         <title>Laravel</title>
         <h1>Jacob McGuire</h1>
         <p>{{ date('Y-m-d') }}</p>
+        <p>Updated with Crontab!</p>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
