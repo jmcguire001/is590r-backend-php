@@ -22,7 +22,7 @@ class UserSeeder extends Seeder
                 'name' => 'Jake McGuire',
                 'email' => 'electric.jay11@gmail.com',
                 'email_verified_at' => null,
-                'password' => bcrypt('Password1'),
+                'password' => bcrypt('password1'),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ]
