@@ -53,7 +53,7 @@ class TeamSeeder extends Seeder
             [
                 'teamName' => 'Boise State University',
                 'teamAbbr' => 'BSU',
-                'teamLogo' => 'images/bsu.png',
+                'teamLogo' => 'images/bsu.jpg',
                 'teamConference' => 'Mountain West',
                 'teamDivision' => 'Mountain',
                 'teamCity' => 'Boise',
