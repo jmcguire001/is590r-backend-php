@@ -26,3 +26,7 @@ Route::middleware('auth:sanctum')->group( function () {
 });
 
 Route::resource('teams', TeamController::class);
+
+Route::controller(TeamController::class)->group(function(): void{
+    Route::post('teams/{id}/update_team_logo','updateTeamLogo');
+});

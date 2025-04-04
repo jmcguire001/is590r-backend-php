@@ -18,8 +18,8 @@ class UserController extends BaseController
         return $this->sendResponse($user, 'User');
     }
 
-    public function uploadAvatar(Request $request){
-       
+    public function uploadAvatar(Request $request)
+    {
         $request->validate([
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
         ]);

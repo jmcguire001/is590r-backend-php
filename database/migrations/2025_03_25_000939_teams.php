@@ -14,16 +14,16 @@ return new class extends Migration
         Schema::dropIfExists(table:'teams');
         Schema::create(table:'teams',callback:function(Blueprint $table): void {
             $table->id();
-            $table->string(column:'teamName');
-            $table->string(column:'teamAbbr');
-            $table->string(column:'teamLogo');
-            $table->string(column:'teamConference');
-            $table->string(column:'teamDivision');
-            $table->string(column:'teamCity');
-            $table->string(column:'teamState');
-            $table->string(column:'teamCountry');
-            $table->string(column:'teamStadium');
-            $table->string(column:'teamMascot');
+            $table->string(column:'name');
+            $table->string(column:'abbr');
+            $table->string(column:'logo');
+            $table->integer(column:'confId')->nullable();
+            $table->integer(column:'divId')->nullable();
+            $table->string(column:'city');
+            $table->string(column:'state');
+            $table->string(column:'country');
+            $table->string(column:'stadium');
+            $table->string(column:'mascot')->nullable();
             $table->timestamp(column:'created_at')->useCurrent();
         });
     }
