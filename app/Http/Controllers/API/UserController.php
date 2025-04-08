@@ -37,6 +37,11 @@ class UserController extends BaseController
             if(!$path) {
                 return $this->sendError($path, 'User profile avatar failed to upload!');
             }
+
+            // Delete old avatar if exists
+            if ($user->avatar) {
+                Storage::disk('s3')->delete($user->avatar);
+            }
             
             $user->avatar = $path;
             $user->save();

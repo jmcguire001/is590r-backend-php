@@ -4,6 +4,9 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\Team;
+use App\Models\Conference;
+use App\Models\Division;
+use App\Models\ConferenceDivision;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -22,8 +25,10 @@ class DatabaseSeeder extends Seeder
         
         $this->call([
             UserSeeder::class,
+            ConferenceSeeder::class,
+            DivisionSeeder::class,
+            ConferenceDivisionSeeder::class,
             TeamSeeder::class,
-            ConferenceSeeder::class
         ]);
     }
 }

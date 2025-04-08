@@ -26,6 +26,15 @@ class UserSeeder extends Seeder
                 'avatar' => '',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
+            ],
+            [
+                'name' => 'John Christiansen',
+                'email' => 'jchristiansen@cfbsimulator.com',
+                'email_verified_at' => null,
+                'password' => bcrypt('mys00perstrongP@ssword'),
+                'avatar' => '',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
             ]
         ];
             

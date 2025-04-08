@@ -93,6 +93,14 @@ class ConferenceSeeder extends Seeder
                 'confGames' => 8,
                 'divGames' => 0,
                 'value' => 53
+            ],
+            [
+                'name' => 'Independents',
+                'abbr' => 'IND',
+                'isPower' => false,
+                'confGames' => 0,
+                'divGames' => 0,
+                'value' => 0
             ]
         ];
 

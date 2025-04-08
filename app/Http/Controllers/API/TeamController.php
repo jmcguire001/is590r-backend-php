@@ -4,6 +4,9 @@ namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use App\Models\Team;
+use App\Models\Conference;
+use App\Models\Division;
+use App\Models\ConferenceDivision;
 use AWS\CRT\HTTP\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -18,7 +21,7 @@ class TeamController extends BaseController
     {
         // $teams = Team::orderBy(column: 'name', direction:'asc')->get(); // select * from teams
 
-        $teams = Team::orderBy(column: 'name', direction:'asc')->with(relations:['conference'])->get(); // select * from teams
+        $teams = Team::orderBy(column: 'name', direction:'asc')->with(relations:['conference','division'])->get(); // select * from teams
 
         foreach($teams as $team) {
             $team->logo=$this->getS3Url($team->logo);
@@ -156,5 +159,11 @@ class TeamController extends BaseController
 
         $success['team'] = $id;
         return $this->sendResponse($success, message:'Team deleted successfully!');
+    }
+
+    public function getConferences()
+    {
+        $conferences = Conference::orderBy(column: 'name', direction:'asc')->with('divisions')->get(); // Get all conferences with divisions
+        return $this->sendResponse($conferences, 'Conferences retrieved successfully');
     }
 }
