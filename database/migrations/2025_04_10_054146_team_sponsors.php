@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::dropIfExists('conference_divisions');
-        Schema::create('conference_divisions', function (Blueprint $table) {
+        Schema::dropIfExists('team_sponsors');
+        Schema::create('team_sponsors', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('confId')->constrained('conferences')->onDelete('cascade');
-            $table->foreignId('divId')->constrained('divisions')->onDelete('cascade');
+            $table->foreignId('teamId')->constrained('teams')->onDelete('cascade');
+            $table->foreignId('sponsorId')->constrained('sponsors')->onDelete('cascade');
             $table->timestamps();
-        });        
+        });
     }
 
     /**
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('conference_divisions');
+        Schema::dropIfExists('team_sponsors');
     }
 };

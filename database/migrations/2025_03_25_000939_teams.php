@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->string(column:'name');
             $table->string(column:'abbr');
-            $table->string(column:'logo');
+            $table->string(column:'logo')->nullable();
             $table->integer(column:'confId')->nullable();
             $table->integer(column:'divId')->nullable();
             $table->string(column:'city');

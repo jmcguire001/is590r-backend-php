@@ -7,6 +7,7 @@ use App\Models\Team;
 use App\Models\Conference;
 use App\Models\Division;
 use App\Models\ConferenceDivision;
+use App\Models\Sponsors;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -29,6 +30,8 @@ class DatabaseSeeder extends Seeder
             DivisionSeeder::class,
             ConferenceDivisionSeeder::class,
             TeamSeeder::class,
+            SponsorSeeder::class,
+            TeamSponsorsSeeder::class
         ]);
     }
 }

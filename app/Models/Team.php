@@ -38,4 +38,9 @@ class Team extends Model
     {
         return $this->belongsTo(Division::class, 'divId', 'id');
     }
+
+    public function sponsors(): BelongsToMany
+    {
+        return $this->belongsToMany(Sponsors::class, 'team_sponsors', 'teamId', 'sponsorId');
+    }
 }
