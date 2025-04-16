@@ -31,5 +31,6 @@ Route::controller(TeamController::class)->group(function(): void{
     Route::get('teams/sponsors', 'getSponsors');
     Route::get('teams/stadiums', 'getStadiums');
     Route::get('stadiums/check', 'checkStadium');
+    Route::get('stadiums/edit', 'editStadium');
 });
 Route::resource('teams', TeamController::class);

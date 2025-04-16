@@ -170,23 +170,28 @@ class TeamController extends BaseController
         $team->mascot = $request['mascot'];
 
         // Try to find the stadium by name
-        $existingStadium = DB::select('SELECT * FROM stadiums WHERE name = ?', [$request['stadium']]);
+        $existingStadium = DB::select('SELECT * FROM stadiums WHERE name = ?', [$request['stadiumName']]);
 
-        if (empty($existingStadium)) {
+        $stadiumName = $request['stadiumName'];
+        $existingStadium = DB::selectOne('SELECT * FROM stadiums WHERE name = ?', [$stadiumName]);
+        
+        if (!$existingStadium) {
             // Insert new stadium
-            DB::insert('INSERT INTO stadiums (name, created_at) VALUES (?, NOW())', [$request['stadium']]);
-            $stadiumId = DB::getPdo()->lastInsertId(); // Get the new ID
+            DB::insert('INSERT INTO stadiums (name, created_at) VALUES (?, NOW())', [$stadiumName]);
+            $stadiumId = DB::getPdo()->lastInsertId();
+            $team->stadium = $stadiumId;
         } else {
-            $stadiumId = $existingStadium[0]->id;
-
-            // Check if stadium is already assigned to another team
-            $taken = DB::select('SELECT * FROM teams WHERE stadium = ?', [$stadiumId]);
-            if (!empty($taken)) {
+            $stadiumId = $existingStadium->id;
+        
+            // Check if stadium is already used by a different team
+            $otherTeam = DB::selectOne('SELECT * FROM teams WHERE stadium = ? AND id != ?', [$stadiumId, $team->id]);
+        
+            if ($otherTeam) {
                 return $this->sendError('Stadium already assigned to a team.');
             }
-        }
-
-        $team->stadium = $stadiumId;
+        
+            $team->stadium = $stadiumId;
+        }        
 
         $team->save();
 
@@ -252,22 +257,50 @@ class TeamController extends BaseController
     public function checkStadium(Request $request)
     {
         $stadiumName = $request->query('name');
+        $teamId = $request->query('teamId');
     
-        // Check if the stadium exists
         $stadium = DB::select('SELECT * FROM stadiums WHERE name = ?', [$stadiumName]);
-        
+    
         if (empty($stadium)) {
             return response()->json(['status' => 'new']); 
         }
-        
-        // Check if the stadium is already associated with a team
-        $team = DB::select('SELECT * FROM teams WHERE stadium = ?', [$stadium[0]->id]);
-        
+    
+        $stadiumId = $stadium[0]->id;
+    
+        $team = DB::select('SELECT * FROM teams WHERE stadium = ?', [$stadiumId]);
+    
         if ($team) {
+            if ($team[0]->id == $teamId) {
+                return response()->json(['status' => 'same', 'stadiumId' => $stadiumId]);
+            }
             return response()->json(['status' => 'taken']); 
         }
-        
-        // Stadium is available
-        return response()->json(['status' => 'available', 'stadium' => $stadium[0]->name]);
+    
+        return response()->json(['status' => 'available', 'stadiumId' => $stadiumId]);
+    }
+
+    public function editStadium(Request $request)
+    {
+        $stadiumName = $request->query('name');
+        $teamId = $request->query('teamId');
+    
+        $stadium = DB::select('SELECT * FROM stadiums WHERE name = ?', [$stadiumName]);
+    
+        if (empty($stadium)) {
+            return response()->json(['status' => 'new']); 
+        }
+    
+        $stadiumId = $stadium[0]->id;
+    
+        $team = DB::select('SELECT * FROM teams WHERE stadium = ?', [$stadiumId]);
+    
+        if ($team) {
+            if ($team[0]->id == $teamId) {
+                return response()->json(['status' => 'same', 'stadiumId' => $stadiumId]);
+            }
+            return response()->json(['status' => 'taken']); 
+        }
+    
+        return response()->json(['status' => 'available', 'stadiumId' => $stadiumId]);
     }
 }
