@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             ConferenceSeeder::class,
             DivisionSeeder::class,
             ConferenceDivisionSeeder::class,
+            StadiumSeeder::class,
             TeamSeeder::class,
             SponsorSeeder::class,
             TeamSponsorsSeeder::class

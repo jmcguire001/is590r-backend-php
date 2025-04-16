@@ -23,7 +23,7 @@ class TeamSeeder extends Seeder
                 'city' => 'Provo',
                 'state' => 'Utah',
                 'country' => 'USA',
-                'stadium' => 'LaVell Edwards Stadium',
+                'stadium' => '1',
                 'mascot' => 'Cougars'
             ],
             [
@@ -35,7 +35,7 @@ class TeamSeeder extends Seeder
                 'city' => 'Salt Lake City',
                 'state' => 'Utah',
                 'country' => 'USA',
-                'stadium' => 'Rice-Eccles Stadium',
+                'stadium' => '2',
                 'mascot' => 'Utes'
             ],
             [
@@ -47,7 +47,7 @@ class TeamSeeder extends Seeder
                 'city' => 'Logan',
                 'state' => 'Utah',
                 'country' => 'USA',
-                'stadium' => 'Merlin Olsen Field at Maverik Stadium',
+                'stadium' => '5',
                 'mascot' => 'Aggies'
             ],
             [
@@ -59,7 +59,7 @@ class TeamSeeder extends Seeder
                 'city' => 'Boise',
                 'state' => 'Idaho',
                 'country' => 'USA',
-                'stadium' => 'Albertsons Stadium',
+                'stadium' => '3',
                 'mascot' => 'Broncos'
             ],
             [
@@ -71,7 +71,7 @@ class TeamSeeder extends Seeder
                 'city' => 'Laramie',
                 'state' => 'Wyoming',
                 'country' => 'USA',
-                'stadium' => 'War Memorial Stadium',
+                'stadium' => '4',
                 'mascot' => 'Cowboys'
             ]
         ];

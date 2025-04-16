@@ -7,6 +7,7 @@ use App\Models\Team;
 use App\Models\Conference;
 use App\Models\Division;
 use App\Models\ConferenceDivision;
+use App\Models\Stadium;
 use AWS\CRT\HTTP\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -20,14 +21,16 @@ class TeamController extends BaseController
 {
     public function index()
     {
-        // $teams = Team::orderBy(column: 'name', direction:'asc')->get(); // select * from teams
-
-        $teams = Team::orderBy(column: 'name', direction:'asc')->with(relations:['conference','division','sponsors'])->get(); // select * from teams
-
+        $teams = Team::orderBy('name', 'asc')
+            ->with(['conference', 'division', 'sponsors'])
+            ->get();
+    
         foreach($teams as $team) {
-            $team->logo=$this->getS3Url($team->logo);
+            $stadium = DB::selectOne('SELECT * FROM stadiums WHERE id = ?', [$team->stadium]);
+            $team->stadium = $stadium;
+            $team->logo = $this->getS3Url($team->logo);
         }
-
+    
         return $this->sendResponse($teams, 'Teams');
     }
 
@@ -71,8 +74,26 @@ class TeamController extends BaseController
         $team->city = $request['city'];
         $team->state = $request['state'];
         $team->country = $request['country'];
-        $team->stadium = $request['stadium'];
         $team->mascot = $request['mascot'];
+
+        // Try to find the stadium by name
+        $existingStadium = DB::select('SELECT * FROM stadiums WHERE name = ?', [$request['stadium']]);
+
+        if (empty($existingStadium)) {
+            // Insert new stadium
+            DB::insert('INSERT INTO stadiums (name, created_at) VALUES (?, NOW())', [$request['stadium']]);
+            $stadiumId = DB::getPdo()->lastInsertId(); // Get the new ID
+        } else {
+            $stadiumId = $existingStadium[0]->id;
+
+            // Check if stadium is already assigned to another team
+            $taken = DB::select('SELECT * FROM teams WHERE stadium = ?', [$stadiumId]);
+            if (!empty($taken)) {
+                return $this->sendError('Stadium already assigned to a team.');
+            }
+        }
+
+        $team->stadium = $stadiumId;
 
         $team->save();
 
@@ -83,7 +104,6 @@ class TeamController extends BaseController
             $team->logo = null;
         }
 
-        // Replace this section in TeamController.php store method
         $sponsor = json_decode($request['sponsorIds'], true); // Decode as array
 
         // Only process sponsors if the array is not empty
@@ -96,7 +116,6 @@ class TeamController extends BaseController
             }
         }
 
-        // After saving the team in the store method
         $team->load('sponsors'); // Ensure sponsors are loaded
         $success['team'] = $team;
 
@@ -148,8 +167,27 @@ class TeamController extends BaseController
         $team->city = $request['city'];
         $team->state = $request['state'];
         $team->country = $request['country'];
-        $team->stadium = $request['stadium'];
         $team->mascot = $request['mascot'];
+
+        // Try to find the stadium by name
+        $existingStadium = DB::select('SELECT * FROM stadiums WHERE name = ?', [$request['stadium']]);
+
+        if (empty($existingStadium)) {
+            // Insert new stadium
+            DB::insert('INSERT INTO stadiums (name, created_at) VALUES (?, NOW())', [$request['stadium']]);
+            $stadiumId = DB::getPdo()->lastInsertId(); // Get the new ID
+        } else {
+            $stadiumId = $existingStadium[0]->id;
+
+            // Check if stadium is already assigned to another team
+            $taken = DB::select('SELECT * FROM teams WHERE stadium = ?', [$stadiumId]);
+            if (!empty($taken)) {
+                return $this->sendError('Stadium already assigned to a team.');
+            }
+        }
+
+        $team->stadium = $stadiumId;
+
         $team->save();
 
         if(isset($team->logo)){
@@ -203,5 +241,33 @@ class TeamController extends BaseController
     {
         $sponsors = DB::table('sponsors')->orderBy(column: 'name', direction:'asc')->get(); // Get all sponsors
         return $this->sendResponse($sponsors, 'Sponsors retrieved successfully');
+    }
+
+    public function getStadiums()
+    {
+        $stadiums = DB::table('stadiums')->orderBy(column: 'name', direction:'asc')->get(); // Get all stadiums
+        return $this->sendResponse($stadiums, 'Stadiums retrieved successfully');
+    }
+
+    public function checkStadium(Request $request)
+    {
+        $stadiumName = $request->query('name');
+    
+        // Check if the stadium exists
+        $stadium = DB::select('SELECT * FROM stadiums WHERE name = ?', [$stadiumName]);
+        
+        if (empty($stadium)) {
+            return response()->json(['status' => 'new']); 
+        }
+        
+        // Check if the stadium is already associated with a team
+        $team = DB::select('SELECT * FROM teams WHERE stadium = ?', [$stadium[0]->id]);
+        
+        if ($team) {
+            return response()->json(['status' => 'taken']); 
+        }
+        
+        // Stadium is available
+        return response()->json(['status' => 'available', 'stadium' => $stadium[0]->name]);
     }
 }

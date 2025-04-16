@@ -29,5 +29,7 @@ Route::controller(TeamController::class)->group(function(): void{
     Route::post('teams/{id}/update_team_logo','updateTeamLogo');
     Route::get('teams/conferences', 'getConferences');
     Route::get('teams/sponsors', 'getSponsors');
+    Route::get('teams/stadiums', 'getStadiums');
+    Route::get('stadiums/check', 'checkStadium');
 });
 Route::resource('teams', TeamController::class);

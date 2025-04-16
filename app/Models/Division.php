@@ -10,7 +10,8 @@ class Division extends Model
 {
     use HasFactory;
 
-    public function conferences(): BelongsToMany {
+    public function conferences(): BelongsToMany
+    {
         return $this->belongsToMany(Conference::class, 'conference_divisions', 'divId', 'confId');
     }  
 }

@@ -22,9 +22,11 @@ return new class extends Migration
             $table->string(column:'city');
             $table->string(column:'state');
             $table->string(column:'country');
-            $table->string(column:'stadium');
+            $table->unsignedBigInteger('stadium');
             $table->string(column:'mascot')->nullable();
             $table->timestamp(column:'created_at')->useCurrent();
+
+            $table->foreign('stadium')->references('id')->on('stadiums')->onDelete('cascade');
         });
     }
 

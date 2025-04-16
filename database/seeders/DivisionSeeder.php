@@ -36,6 +36,7 @@ class DivisionSeeder extends Seeder
                 'name' => 'Mountain'
             ]
         ];
+        
         Division::insert($divisions);
     }
 }

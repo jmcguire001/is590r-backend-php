@@ -30,7 +30,8 @@ class Team extends Model
 
     // public $name = 'teams'; <-- Laravel will automatically use lowercase plural form of model name as table name
 
-    public function conference(): BelongsTo{
+    public function conference(): BelongsTo
+    {
         return $this->belongsTo(Conference::class, 'confId', 'id');
     }
 
@@ -43,4 +44,9 @@ class Team extends Model
     {
         return $this->belongsToMany(Sponsors::class, 'team_sponsors', 'teamId', 'sponsorId');
     }
+
+    public function stadium(): BelongsTo
+    {
+        return $this->belongsTo(Stadium::class, 'stadium', 'id')->withDefault();
+    }    
 }
